@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Desenvolvimento Web Sustentável — Conteúdo do repositório</title>
+<meta name="description" content="Arquivos e conteúdo do repositório sobre desenvolvimento web sustentável: estratégias para redução do consumo energético." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Desenvolvimento Web Sustentável" />
+<meta property="og:description" content="Estratégias para redução do consumo energético em aplicações web." />
+<meta name="twitter:card" content="summary" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f6f8f5;
+    --surface: #ffffff;
+    --ink: #16231c;
+    --muted: #5a6b60;
+    --primary: #1f7a4d;
+    --border: #dbe5dd;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "DM Sans", system-ui, sans-serif;
+    line-height: 1.6;
+  }
+  header {
+    background: linear-gradient(160deg, #14522f, #1f7a4d);
+    color: #f2fbf5;
+    padding: 3rem 1.25rem 2.5rem;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  h1, h2 { font-family: "Space Grotesk", system-ui, sans-serif; line-height: 1.2; }
+  h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); margin: 0 0 .75rem; }
+  header p { margin: 0 0 1.25rem; opacity: .9; }
+  .btn {
+    display: inline-block; padding: .6rem 1.1rem; border-radius: 999px;
+    background: #f2fbf5; color: #14522f; text-decoration: none; font-weight: 600;
+  }
+  main { padding: 2rem 1.25rem 4rem; }
+  section { margin-bottom: 2.5rem; }
+  ul.files { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
+  ul.files li {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: .85rem 1rem; display: flex; flex-wrap: wrap; gap: .5rem 1rem;
+    align-items: center; justify-content: space-between;
+  }
+  .path { font-weight: 600; word-break: break-all; }
+  .size { color: var(--muted); font-size: .85rem; }
+  .links a { color: var(--primary); text-decoration: none; font-weight: 600; margin-left: .75rem; }
+  .links a:hover { text-decoration: underline; }
+  pre {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1rem; overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+  }
+  footer { color: var(--muted); font-size: .85rem; text-align: center; padding: 0 1.25rem 2rem; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Desenvolvimento Web Sustentável</h1>
+    <p id="desc">Estratégias para redução do consumo energético em aplicações web.</p>
+    <a class="btn" href="https://github.com/JosimedioLeal/desenvolvimento-web-sustentavel">Ver repositório no GitHub</a>
+  </div>
+</header>
+<main class="wrap">
+  <section>
+    <h2>Arquivos do repositório</h2>
+    <ul class="files" id="files"><li>Carregando arquivos…</li></ul>
+  </section>
+  <section>
+    <h2>Conteúdo do README</h2>
+    <pre id="readme">Carregando conteúdo…</pre>
+  </section>
+</main>
+<footer>Publicado com GitHub Pages a partir do próprio repositório.</footer>
+<script>
+  const OWNER = "JosimedioLeal";
+  const REPO = "desenvolvimento-web-sustentavel";
+  const fmt = (n) => n < 1024 ? n + " B" : n < 1048576 ? (n / 1024).toFixed(1) + " KB" : (n / 1048576).toFixed(1) + " MB";
+
+  fetch(`https://api.github.com/repos/${OWNER}/${REPO}`)
+    .then((r) => r.json())
+    .then((d) => { if (d && d.description) document.getElementById("desc").textContent = d.description; })
+    .catch(() => {});
+
+  fetch(`https://api.github.com/repos/${OWNER}/${REPO}/git/trees/main?recursive=1`)
+    .then((r) => r.json())
+    .then((d) => {
+      const list = document.getElementById("files");
+      const files = (d.tree || []).filter((e) => e.type === "blob").sort((a, b) => a.path.localeCompare(b.path));
+      if (!files.length) { list.innerHTML = "<li>Nenhum arquivo encontrado.</li>"; return; }
+      list.innerHTML = files.map((f) => `
+        <li>
+          <span><span class="path">${f.path}</span> <span class="size">${fmt(f.size || 0)}</span></span>
+          <span class="links">
+            <a href="https://github.com/${OWNER}/${REPO}/blob/main/${f.path}">Ler no GitHub</a>
+            <a href="https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${f.path}" download>Baixar</a>
+          </span>
+        </li>`).join("");
+    })
+    .catch(() => { document.getElementById("files").innerHTML = "<li>Não foi possível carregar a lista de arquivos.</li>"; });
+
+  fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/README.md`)
+    .then((r) => r.text())
+    .then((t) => { document.getElementById("readme").textContent = t; })
+    .catch(() => { document.getElementById("readme").textContent = "Não foi possível carregar o README."; });
+</script>
+</body>
+</html>
